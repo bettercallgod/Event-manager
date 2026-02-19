@@ -5,11 +5,15 @@ from typing import List, Dict, Any, Optional
 import uuid
 from datetime import datetime
 from app.core.database import get_db
+from app.core.config import settings
 from app.models import Conversation, User
 from app.services.ai_service import ai_service
 from app.services.event_service import EventService
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
+
+# Demo conversation storage
+DEMO_CONVERSATIONS = {}
 
 
 @router.post("/message", response_model=Dict[str, Any])
@@ -24,6 +28,10 @@ async def send_message(
     
     if not user_message:
         raise HTTPException(status_code=400, detail="Message is required")
+    
+    # Demo mode handling
+    if settings.DEMO_MODE:
+        return await demo_chat(message_data, session_id)
     
     # Get or create conversation
     conversation = None
@@ -107,7 +115,7 @@ async def send_message(
                     "ai_summary": e.ai_summary,
                     "category": e.category,
                     "city": e.city,
-                    "start_time": e.start_time.isoformat() if e.start_time else None,
+                    "start_time": e.start_time.isoformat() if hasattr(e, 'start_time') and e.start_time else None,
                     "price": e.price,
                     "is_free": e.is_free,
                 }
@@ -125,12 +133,78 @@ async def send_message(
     }
 
 
+async def demo_chat(message: str, session_id: str) -> Dict[str, Any]:
+    """Demo mode chat - works without database or AI API"""
+    from app.services.event_service import DEMO_EVENTS
+    
+    # Simple demo responses
+    message_lower = message.lower()
+    
+    # Check for event search keywords
+    search_keywords = ["find", "search", "looking for", "recommend", "show me", "events", "jazz", "yoga", "tech", "food", "art"]
+    is_searching = any(kw in message_lower for kw in search_keywords)
+    
+    if is_searching:
+        # Search demo events
+        results = []
+        for event in DEMO_EVENTS:
+            if (message_lower in event["title"].lower() or 
+                message_lower in event["description"].lower() or
+                message_lower in event["category"].lower()):
+                results.append(event)
+        
+        if not results:
+            results = DEMO_EVENTS[:3]
+        
+        ai_response = f"I found {len(results)} events that might interest you! Check them out below. 🎉"
+        
+        return {
+            "session_id": session_id,
+            "user_message": message,
+            "ai_response": ai_response,
+            "events": results[:3],
+            "preferences": {},
+        }
+    
+    # Default responses
+    responses = [
+        "That's interesting! Tell me more about what kind of events you're looking for. Are you into music, food, sports, or something else?",
+        "I'd love to help you find something fun! What type of experience are you looking for?",
+        "Great! I can help you discover amazing events. What kind of activities do you enjoy?",
+        "Sounds good! Are you looking to attend an event, or do you want to host one?",
+    ]
+    
+    import random
+    ai_response = random.choice(responses)
+    
+    return {
+        "session_id": session_id,
+        "user_message": message,
+        "ai_response": ai_response,
+        "events": [],
+        "preferences": {},
+    }
+
+
 @router.get("/session/{session_id}", response_model=Dict[str, Any])
 async def get_conversation(
     session_id: str,
     db: AsyncSession = Depends(get_db)
 ):
     """Get conversation history for a session"""
+    # Demo mode
+    if settings.DEMO_MODE:
+        conv = DEMO_CONVERSATIONS.get(session_id)
+        if not conv:
+            return {
+                "session_id": session_id,
+                "message_history": [],
+                "extracted_preferences": {},
+                "created_at": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(),
+            }
+        return conv
+    
     stmt = select(Conversation).where(Conversation.session_id == session_id)
     result = await db.execute(stmt)
     conversation = result.scalar_one_or_none()
@@ -153,6 +227,12 @@ async def delete_conversation(
     db: AsyncSession = Depends(get_db)
 ):
     """Delete a conversation session"""
+    # Demo mode
+    if settings.DEMO_MODE:
+        if session_id in DEMO_CONVERSATIONS:
+            del DEMO_CONVERSATIONS[session_id]
+        return {"status": "deleted", "session_id": session_id}
+    
     stmt = select(Conversation).where(Conversation.session_id == session_id)
     result = await db.execute(stmt)
     conversation = result.scalar_one_or_none()

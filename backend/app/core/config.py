@@ -9,9 +9,12 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
     
+    # Demo Mode (when no database available)
+    DEMO_MODE: bool = os.getenv("DEMO_MODE", "true").lower() == "true"
+    
     # Database
-    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/eventdiscovery"
-    DATABASE_ASYNC_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/eventdiscovery"
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/eventdiscovery")
+    DATABASE_ASYNC_URL: str = os.getenv("DATABASE_ASYNC_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/eventdiscovery")
     
     # AI
     OPENAI_API_KEY: str = ""

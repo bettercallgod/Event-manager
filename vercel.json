@@ -16,6 +16,8 @@
     }
   ],
   "env": {
-    "PYTHONPATH": "."
+    "PYTHONPATH": ".",
+    "DEMO_MODE": "true",
+    "DEBUG": "false"
   }
 }
