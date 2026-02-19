@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventDiscovery AI - Find Your Next Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="text-3xl">🎉</div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    EventDiscovery AI
+                </h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#discover" class="text-gray-600 hover:text-purple-600 transition">Discover</a>
+                <a href="#create" class="text-gray-600 hover:text-purple-600 transition">Create Event</a>
+                <a href="#chat" class="text-gray-600 hover:text-purple-600 transition">AI Assistant</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                Find Events You'll
+                <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Love</span>
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Chat with our AI to discover local events tailored to your interests. 
+                From garage sales to concerts - we've got you covered.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#chat" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:shadow-lg transform hover:-translate-y-1 transition">
+                    Start Chatting 🚀
+                </a>
+                <a href="#discover" class="px-8 py-4 bg-white text-purple-600 border-2 border-purple-600 rounded-full font-semibold text-lg hover:bg-purple-50 transition">
+                    Browse Events
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Interface -->
+    <section id="chat" class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+                    <h3 class="text-xl font-bold text-white flex items-center">
+                        <span class="mr-2">🤖</span> AI Event Assistant
+                    </h3>
+                </div>
+                
+                <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-4 bg-gray-50">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white text-sm">AI</div>
+                        <div class="bg-white rounded-lg rounded-tl-none px-4 py-3 shadow-sm max-w-lg">
+                            <p class="text-gray-800">Hey! I'm your AI event assistant. Tell me what kind of experiences you're looking for, and I'll help you discover amazing local events! 🎉</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t bg-white">
+                    <form id="chat-form" class="flex space-x-3">
+                        <input 
+                            type="text" 
+                            id="chat-input"
+                            placeholder="I'm looking for live music this weekend..." 
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            autocomplete="off"
+                        >
+                        <button 
+                            type="submit" 
+                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-md transition"
+                        >
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Results -->
+    <section id="event-results" class="py-16 px-4 hidden">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-3xl font-bold mb-8 text-center">Recommended Events</h3>
+            <div id="events-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Events will be inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Discover Section -->
+    <section id="discover" class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-3xl font-bold mb-8 text-center">Discover Events</h3>
+            
+            <!-- Search -->
+            <div class="mb-8">
+                <form id="search-form" class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        placeholder="Search for events, venues, or cities..." 
+                        class="flex-1 px-6 py-4 border-2 border-gray-200 rounded-full focus:outline-none focus:border-purple-500 text-lg"
+                    >
+                    <button 
+                        type="submit" 
+                        class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transition"
+                    >
+                        Search
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Filters -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <select id="filter-category" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="">All Categories</option>
+                    <option value="music">Music</option>
+                    <option value="food">Food & Drink</option>
+                    <option value="arts">Arts & Culture</option>
+                    <option value="sports">Sports</option>
+                    <option value="networking">Networking</option>
+                    <option value="education">Education</option>
+                    <option value="family">Family</option>
+                </select>
+                <select id="filter-price" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="">Any Price</option>
+                    <option value="free">Free Only</option>
+                    <option value="low">Under $20</option>
+                    <option value="medium">$20-$50</option>
+                    <option value="high">$50+</option>
+                </select>
+            </div>
+            
+            <!-- Events Grid -->
+            <div id="discover-events-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Events loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Create Event Section -->
+    <section id="create" class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h3 class="text-3xl font-bold mb-4 text-center">Create an Event 🎪</h3>
+                <p class="text-gray-600 text-center mb-8">
+                    Just describe your event in natural language - no forms needed!
+                </p>
+                
+                <form id="create-event-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Describe Your Event
+                        </label>
+                        <textarea 
+                            id="event-description"
+                            rows="5"
+                            placeholder="I'm hosting a jazz night at my café next Friday at 8pm. It's free entry with a $10 minimum drink purchase. We'll have local musicians playing classic jazz standards..."
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        ></textarea>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold text-lg hover:shadow-lg transition"
+                    >
+                        Create Event ✨
+                    </button>
+                </form>
+                
+                <div id="create-result" class="mt-6 hidden">
+                    <!-- Result will be shown here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4 mt-20">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="text-4xl mb-4">🎉</div>
+            <h4 class="text-2xl font-bold mb-4">EventDiscovery AI</h4>
+            <p class="text-gray-400 mb-8">
+                Discover and create amazing local experiences through natural conversation.
+            </p>
+            <p class="text-gray-500 text-sm">
+                &copy; 2024 EventDiscovery AI. Built with ❤️ using FastAPI & AI.
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
