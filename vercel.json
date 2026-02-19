@@ -1,0 +1,21 @@
+{
+  "builds": [
+    {
+      "src": "backend/app/main.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.11",
+        "install": "pip install -r backend/requirements.txt"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/app/main.py"
+    }
+  ],
+  "env": {
+    "PYTHONPATH": "."
+  }
+}
