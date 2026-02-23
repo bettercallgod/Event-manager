@@ -2,6 +2,9 @@ from pydantic_settings import BaseSettings
 from typing import Optional
 import os
 
+# Disable .env file loading to avoid errors
+os.environ.setdefault("DEMO_MODE", "true")
+
 
 class Settings(BaseSettings):
     # App
@@ -10,11 +13,11 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     
     # Demo Mode (when no database available)
-    DEMO_MODE: bool = os.getenv("DEMO_MODE", "true").lower() == "true"
+    DEMO_MODE: bool = True
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/eventdiscovery")
-    DATABASE_ASYNC_URL: str = os.getenv("DATABASE_ASYNC_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/eventdiscovery")
+    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/eventdiscovery"
+    DATABASE_ASYNC_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/eventdiscovery"
     
     # AI
     OPENAI_API_KEY: str = ""
@@ -25,13 +28,13 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
     
     # CORS
-    CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: list = ["*"]
     
     class Config:
-        env_file = ".env"
+        env_file = None
         case_sensitive = True
 
 
