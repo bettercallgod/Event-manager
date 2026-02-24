@@ -1,23 +1,11 @@
 {
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/backend/app/main.py" }
+  ],
   "builds": [
     {
       "src": "backend/app/main.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python3.11",
-        "maxLambdaSize": "50mb"
-      }
+      "use": "@vercel/python"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "backend/app/main.py"
-    }
-  ],
-  "env": {
-    "PYTHONPATH": "backend",
-    "DEMO_MODE": "true",
-    "DEBUG": "true"
-  }
+  ]
 }
